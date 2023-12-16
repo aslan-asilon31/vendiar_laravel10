@@ -4,8 +4,13 @@ namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ImageMaster;
+use App\Models\Product;
+use App\Models\MasterData\ImageMaster;
+use App\Models\MasterData\StatusMaster;
+use App\Models\MasterData\categoryMaster;
 use Datatables;
+use DB;
+use Alert;
 
 class ImageMasterController extends Controller
 {
@@ -15,47 +20,73 @@ class ImageMasterController extends Controller
     }
 
     public function getdata(){
-
+        
         if(request()->ajax()) {
-            return datatables()->of(ImageMaster::select('*'))
+
+
+            $query = " SELECT a.*, b.name as product_name, c.name as status_name, d.name as category_name
+                        FROM image_masters a
+                        LEFT JOIN products b ON a.product_id = b.product_id
+                        LEFT JOIN status_masters c ON a.status_id = c.status_id
+                        LEFT JOIN category_masters d ON a.category_id = d.category_master_id
+                    ";
+
+            $users = DB::connection('mysql')->select($query);
+            // dd($users);
+
+            return datatables()->of($users)
             ->addColumn('action', 'imagemasters.action')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
         }
 
-        // $users = User::all();
-        // return view('masterdata.imagemasters.index',compact('imagemasters'));
     }
 
     public function create()
     {
-        return view('masterdata.imagemasters.create');
+        $data['products'] = Product::select('product_id', 'name')->get();
+        $data['images'] = ImageMaster::select('image_master_id', 'name')->get();
+        $data['status'] = StatusMaster::select('status_id', 'name')->whereIn('status_id', [1, 2])->get();
+        $data['categories'] = CategoryMaster::select('category_master_id', 'name')->get();
+
+        return view('masterdata.imagemasters.create', compact('data'));
+    }
+
+    public function action()
+    {
+        return view('masterdata.imagemasters.action');
     }
 
     public function store(Request $request)
     {
-        dd($request);
-        // $request->validate([
-        //     'roles_id' => 'required',
-        //     'status_id' => 'required',
-        //     'name' => 'required',
-        //     'lang' => 'required',
-        //     'lang_id' => 'required',
-        // ]);
+        $randomId = null;
 
-        $imagemaster = new RoleMaster;
+        while (!$randomId || ImageMaster::where('product_id', $randomId)->exists()) {
+            $randomId = rand(1, 1000); // Adjust range based on your table size
+        }
 
-        $imagemaster->roles_id = $request->roles_id;
-        $imagemaster->status_id = $request->status_id;
-        $imagemaster->name = $request->name;
-        $imagemaster->lang = $request->lang;
-        $imagemaster->lang_id = $request->lang_id;
+        $image = $request->file('image');
+        $image->storeAs('public/images', $image->hashName());
 
+        $imagemaster = ImageMaster::create([
+            'image_master_id'     => $randomId,
+            'product_id'     => $request->product_id,
+            'status_id'     => $request->status_id,
+            'category_id'     => $request->category_id,
+            'name'     => $request->name,
+            'image'     => $image->hashName(),
+            'description'   => '',
+            'table_name'   => 'image_masters',
+            'lang'   => '',
+            'lang_id'   => ''
+        ]);
 
-        $imagemaster->save();
+        // Alert::success('Hore!', 'Image Created Successfully');
+        // return redirect()->route('imagemasters.index');
+
         return redirect()->route('imagemasters.index')
-                        ->with('success','Image has been created successfully.');
+        ->with('success','Image has been created successfully.');
     }
 
     public function show(RoleMaster $imagemaster)

@@ -28,13 +28,12 @@ Route::resource('rolemasters', RoleMasterController::class);
 Route::post('delete-rolemasters', [RoleMasterController::class,'destroy']);
 Route::get('rolemasters-list', [RoleMasterController::class,'getdata'])->name('rolemasters.list');
 
-
 Route::resource('brandmasters', BrandMasterController::class);
 Route::post('delete-brandmasters', [BrandMasterController::class,'destroy']);
 Route::get('brandmasters-list', [BrandMasterController::class,'getdata'])->name('brandmasters.list');
 
 Route::resource('imagemasters', ImageMasterController::class);
-Route::post('delete-imagemasters', [ImageMasterController::class,'destroy']);
+Route::post('delete-imagemaster', [ImageMasterController::class,'destroy']);
 Route::get('imagemasters-list', [ImageMasterController::class,'getdata'])->name('imagemasters.list');
 
 Route::resource('bankmasters', BankMasterController::class);
@@ -60,6 +59,3 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

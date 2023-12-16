@@ -26,7 +26,7 @@
       <!-- partial:../../partials/_navbar.html -->
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href=""><img src="{{ asset('backend/assets/images/logo.svg'); }}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo" href=""><img src="{{ asset('lumina_logo.png'); }}" alt="logo" /></a>
           <a class="navbar-brand brand-logo-mini" href=""><img src="{{ asset('backend/assets/images/logo-mini.svg'); }}" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -259,8 +259,8 @@
               <h3 class="page-title"> @yield('title') </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">@yield('title')</li>
+                  <li class="breadcrumb-item"><a href="{{route('imagemasters.index')}}">@yield('title',)</a></li> 
+                  <li class="breadcrumb-item active" aria-current="page">@yield('title_sub')</li>
                 </ol>
               </nav>
             </div>

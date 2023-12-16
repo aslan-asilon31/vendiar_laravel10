@@ -33,16 +33,13 @@ class UserController extends Controller
 
         if(request()->ajax()) {
 
-
             $query = "SELECT a.user_id as id,a.name,a.email,c.image as image,a.created_at, b.name as role 
                         FROM users a
                         LEFT JOIN roles_masters b ON a.role = b.roles_id
                         LEFT JOIN image_masters c ON a.image = c.image_master_id
                     ";
 
-
             $users = DB::connection('mysql')->select($query);
-            // dd($users);
 
             return datatables()->of($users)
             ->addColumn('action', 'users.action')
@@ -51,17 +48,16 @@ class UserController extends Controller
             ->make(true);
         }
 
-        // $users = User::all();
-        // return view('users.index',compact('users'));
     }
-
-
-        
-
 
     public function create()
     {
         return view('users.create');
+    }
+
+    public function action()
+    {
+        return view('users.action');
     }
 
 
