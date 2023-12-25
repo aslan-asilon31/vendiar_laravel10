@@ -11,7 +11,7 @@
                             <div class="p-3">
 
                                 <h2 class="mb-2">Register</h2>
-                                <p>Create your POSDash account.</p>
+                                <p>Create your AradanPOS account.</p>
 
                                 <form method="POST" action="{{ route('register') }}">
                                     @csrf
