@@ -4,7 +4,7 @@ namespace App\Http\Controllers\MasterData;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\BrandMaster;
+use App\Models\MasterData\BrandMaster;
 use Datatables;
 
 class BrandMasterController extends Controller
