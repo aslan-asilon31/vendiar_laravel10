@@ -12,11 +12,14 @@ use App\Http\Controllers\MasterData\RegionMasterController;
 use App\Http\Controllers\MasterData\ReviewMasterController;
 use App\Http\Controllers\MasterData\RoleMasterController;
 use App\Http\Controllers\MasterData\StockMasterController;
+use App\Http\Controllers\Auth\SocialiteController;
 
 Route::get('/master-login', [MasterLoginController::class, 'index']);
 Route::get('/order', [OrderController::class, 'index']);
 // Route::get('/users', [UserController::class, 'index'])->name('user.name');
 
+Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider']);
+Route::get('/auth/{provider}/callback', [SocialiteController::class, 'handleProvideCallback']);
 
 Route::resource('users', UserController::class);
 Route::post('delete-user', [UserController::class,'destroy']);
