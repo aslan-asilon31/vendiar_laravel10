@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
 use App\Http\Controllers\MasterData\MasterLoginController;
 use App\Http\Controllers\MasterData\BrandMasterController;
@@ -13,6 +14,11 @@ use App\Http\Controllers\MasterData\ReviewMasterController;
 use App\Http\Controllers\MasterData\RoleMasterController;
 use App\Http\Controllers\MasterData\StockMasterController;
 use App\Http\Controllers\Auth\SocialiteController;
+
+Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/dashboard-transaction', [DashboardController::class, 'dashboardtransaction']);
+
+
 
 Route::get('/master-login', [MasterLoginController::class, 'index']);
 Route::get('/order', [OrderController::class, 'index']);
