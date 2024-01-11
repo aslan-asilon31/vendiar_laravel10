@@ -38,6 +38,8 @@
 
 <img width="959" alt="api-doc-lumina" src="https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/8b2f05f7-2048-4a8a-80ca-a1c2e6b9e47e">
 
+![lumina-dashboard](https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/c2c5a431-29fa-49f2-a176-280732aede3b)
+
 
 </div>
 

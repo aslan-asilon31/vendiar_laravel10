@@ -27,21 +27,21 @@ class OrderSeeder extends Seeder
                 }
         
                 // Loop for yesterday
-                for ($i = 0; $i < 250; $i++) {
-                    Order::create([
-                        'status_id' => $statusIds[array_rand($statusIds)],
-                        'total_price' => rand(100000, 5000000),
-                        'created_at'  => Carbon::yesterday(),
-                    ]);
-                }
+                // for ($i = 0; $i < 250; $i++) {
+                //     Order::create([
+                //         'status_id' => $statusIds[array_rand($statusIds)],
+                //         'total_price' => rand(100000, 5000000),
+                //         'created_at'  => Carbon::yesterday(),
+                //     ]);
+                // }
         
                 // Loop for Carbon::now()->startOfWeek()
-                for ($i = 0; $i < 350; $i++) {
-                    Order::create([
-                        'status_id' => $statusIds[array_rand($statusIds)],
-                        'total_price' => rand(100000, 5000000),
-                        'created_at'  => Carbon::now()->startOfWeek(),
-                    ]);
-                }
+                // for ($i = 0; $i < 350; $i++) {
+                //     Order::create([
+                //         'status_id' => $statusIds[array_rand($statusIds)],
+                //         'total_price' => rand(100000, 5000000),
+                //         'created_at'  => Carbon::now()->startOfWeek(),
+                //     ]);
+                // }
     }
 }

@@ -16,7 +16,7 @@ class TransactionSeeder extends Seeder
     public function run(): void
     {
         // Loop for today
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             Transaction::create([
                 'total_price' => rand(100000, 5000000),
                 'created_at'  => Carbon::today(),
@@ -24,19 +24,20 @@ class TransactionSeeder extends Seeder
         }
 
         // Loop for yesterday
-        for ($i = 0; $i < 50; $i++) {
-            Transaction::create([
-                'total_price' => rand(100000, 5000000),
-                'created_at'  => Carbon::yesterday(),
-            ]);
-        }
+        // for ($i = 0; $i < 50; $i++) {
+        //     Transaction::create([
+        //         'total_price' => rand(100000, 5000000),
+        //         'created_at'  => Carbon::yesterday(),
+        //     ]);
+        // }
 
         // Loop for Carbon::now()->startOfWeek()
-        for ($i = 0; $i < 50; $i++) {
-            Transaction::create([
-                'total_price' => rand(100000, 5000000),
-                'created_at'  => Carbon::now()->startOfWeek(),
-            ]);
-        }
+        // for ($i = 0; $i < 50; $i++) {
+        //     Transaction::create([
+        //         'total_price' => rand(100000, 5000000),
+        //         'created_at'  => Carbon::now()->startOfWeek(),
+        //     ]);
+        // }
+
     }
 }
