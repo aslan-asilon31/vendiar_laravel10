@@ -33,12 +33,18 @@
         <div class="card bg-gradient-danger card-img-holder text-white">
           <div class="card-body">
             <img src="{{ asset('backend/assets/images/dashboard/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3"> Transaction <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-            </h4>
-            <h2 class="mb-5"><span id="TransactionPeriod"></span> <span id="TransactionAll"></span> </h2>
+            <h2 class="font-weight-normal mb-3"> Transaction <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+            </h2>
+            <h6 class="mb-5"><span id="TransactionPeriod"></span> 
+                <span id="TransactionAll"></span> <br> 
+                <span id="TransactionAllSum"></span> 
+                <span id="TransactionAllYesterday"></span> <br> 
+                <span id="TransactionAllSumYesterday"></span> 
+            </h6>
             <div class="tooltip-container card-text">
-                <span class="tooltip-trigger" data-tooltip-src="{{ asset('info/info1.png') }}">Increased <span id="WeeklyTransactionChangePrecentage"></span> %</span>
+                <span class="tooltip-trigger" data-tooltip-src=""><i class="mdi mdi-information "></i>  </span>
             </div>
+            <span id="transaction_price_change_percentage"></span>
           </div>
         </div>
       </div>
@@ -57,14 +63,61 @@
         <div class="card bg-gradient-success card-img-holder text-white">
           <div class="card-body">
             <img src="{{ asset('backend/assets/images/dashboard/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3">Inventory <i class="mdi mdi-diamond mdi-24px float-right"></i>
+            <h4 class="font-weight-normal mb-3">Net Income <i class="mdi mdi-diamond mdi-24px float-right"></i>
             </h4>
-            <h2 class="mb-5">90 %</h2>
+            <h2 class="mb-5">Rp <span id="NetIncomeAll"></span></h2>
             {{-- <h6 class="card-text">Increased by 5%</h6> --}}
           </div>
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-7 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="clearfix">
+              <h4 class="card-title float-left">Transaction By Month</h4>
+            </div>
+                <canvas id="myChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Traffic Sources</h4>
+            <canvas id="traffic-chart"></canvas>
+            <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-7 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="clearfix">
+              <h4 class="card-title float-left">Transaction Today</h4>
+            </div>
+                <canvas id="DashboardChartTransactionToday"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Traffic Sources</h4>
+            <canvas id="traffic-chart"></canvas>
+            <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <div class="row">
       <div class="col-md-7 grid-margin stretch-card">
         <div class="card">
@@ -86,7 +139,9 @@
           </div>
         </div>
       </div>
+
     </div>
+
     <div class="row">
       <div class="col-12 grid-margin">
         <div class="card">
@@ -337,6 +392,7 @@
   </div>
 
 
+
 </div>
 @endsection
 
@@ -356,20 +412,22 @@
     }
 
     .tooltip-trigger:hover::before {
-        display: block;
-        width:500px;
-        content: attr(data-tooltip-src); /* Use attr() to get the value of data-tooltip-src */
-        background-color: #323232; /* Set the background image dynamically */
-        background-size: contain; /* Adjust to 'cover' if you want the image to cover the tooltip */
-        padding: 8px;
-        border-radius: 4px;
-        position: absolute;
-        bottom: 125%; /* Adjust this value to control the distance from the trigger */
-        left: 50%;
-        z-index:99 !important;
-        transform: translateX(-50%);
-    }
-
+    display: block;
+    width: 480px;
+    height: 50px; /* Set the height based on your requirement */
+    content: ''; /* Remove content attribute, as you are using background-image */
+    background-color: #323232;
+    background-image: url({{ asset('info/persentase_perubahan_harga_per_hari.png') }});
+    background-size: contain;
+    background-repeat: no-repeat; /* Prevent the background image from looping */
+    padding: 8px;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    z-index: 99 !important;
+    transform: translateX(-50%);
+}
 </style>
     <link rel="stylesheet" href="{{ asset('backend/assets/vendors/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/vendors/css/vendor.bundle.base.css') }}">
@@ -474,19 +532,14 @@
         });
 
         $('#startDate').on('change', function () {
-            $('#timePeriod').prop('selectedIndex', 0);
-            // loadDataTransaction();
+            $('#timePeriod').val('');
+            $('#TransactionAll').val('');
         });
 
         $('#endDate').on('change', function () {
             $('#timePeriod').prop('selectedIndex', 0);
             // loadDataTransaction();
         });
-
-        // $('#thisWeekTransaction').on('change', function () {
-        //     alert('cehkkkk')
-        //     loadDataTransaction();
-        // });
 
         function loadDataToday() {
             $.ajax({
@@ -495,7 +548,17 @@
                 success: function (response) {
                     if (!isNaN(response.transactions)) {
                         $('#TransactionPeriod').hide();
-                        $('#TransactionAll').html('Today : '+response.transactions);
+                        $('#TransactionAll').html('Today : '+response.transactions+' Transaction');
+                        $('#TransactionAllSum').html('Today Sum : '+formatRupiah(response.totalPriceToday));
+                        $('#TransactionAllYesterday').html('Yesterday : '+response.transaction_yesterday+' Transaction');
+                        $('#TransactionAllSumYesterday').html('Yesterday Sum : '+formatRupiah(response.totalPriceYesterday));
+                        if(response.priceChangePercentage > 0){
+                            $('#transaction_price_change_percentage').html(' <i class=" mdi mdi-arrow-up-bold " style="color:green;"></i> '+Math.ceil(response.transaction_price_change_percentage)+' % from Yesterday');
+                        }else if(response.priceChangePercentage < 0){
+                            $('#transaction_price_change_percentage').html('<i class=" mdi mdi-arrow-down-bold " style="color:red;"></i> '+Math.ceil(response.transaction_price_change_percentage)+' % from Yesterday');
+                        }else{
+                            console.log('')
+                        }
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#TransactionAll').html(0);
@@ -521,14 +584,14 @@
                 success: function (response) {
                     if (!isNaN(response.transactions)) {
                         $('#TransactionPeriod').hide();
-                        $('#TransactionAll').html('Week : '+response.transactions);
+                        $('#TransactionAll').html('This Week : '+response.transactions);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#TransactionAll').html(0);
                     }
                     if (!isNaN(response.orders)) {
                         $('#TransactionPeriod').hide();
-                        $('#OrderAll').html('Week : '+response.orders);
+                        $('#OrderAll').html('This Week : '+response.orders);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#OrderAll').html(0);
@@ -547,14 +610,14 @@
                 success: function (response) {
                     if (!isNaN(response.transactions)) {
                         $('#TransactionPeriod').hide();
-                        $('#TransactionAll').html('Month : '+response.transactions);
+                        $('#TransactionAll').html('This Month : '+response.transactions);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#TransactionAll').html(0);
                     }
                     if (!isNaN(response.orders)) {
                         $('#TransactionPeriod').hide();
-                        $('#OrderAll').html('Month : '+response.orders);
+                        $('#OrderAll').html('This Month : '+response.orders);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#OrderAll').html(0);
@@ -573,14 +636,14 @@
                 success: function (response) {
                     if (!isNaN(response.transactions)) {
                         $('#TransactionPeriod').hide();
-                        $('#TransactionAll').html('Quarter : '+response.transactions);
+                        $('#TransactionAll').html('This Quarter : '+response.transactions);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#TransactionAll').html(0);
                     }
                     if (!isNaN(response.orders)) {
                         $('#TransactionPeriod').hide();
-                        $('#OrderAll').html('Quarter : '+response.orders);
+                        $('#OrderAll').html('This Quarter : '+response.orders);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#OrderAll').html(0);
@@ -599,14 +662,14 @@
                 success: function (response) {
                     if (!isNaN(response.transactions)) {
                         $('#TransactionPeriod').hide();
-                        $('#TransactionAll').html('Semester : '+response.transactions);
+                        $('#TransactionAll').html('This Semester : '+response.transactions);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#TransactionAll').html(0);
                     }
                     if (!isNaN(response.orders)) {
                         $('#TransactionPeriod').hide();
-                        $('#OrderAll').html('Semester : '+response.orders);
+                        $('#OrderAll').html('This Semester : '+response.orders);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#OrderAll').html(0);
@@ -625,14 +688,14 @@
                 success: function (response) {
                     if (!isNaN(response.transactions)) {
                         $('#TransactionPeriod').hide();
-                        $('#TransactionAll').html('Year : '+response.transactions);
+                        $('#TransactionAll').html('This Year : '+response.transactions);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#TransactionAll').html(0);
                     }
                     if (!isNaN(response.orders)) {
                         $('#TransactionPeriod').hide();
-                        $('#OrderAll').html('Year : '+response.orders);
+                        $('#OrderAll').html('This Year : '+response.orders);
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#OrderAll').html(0);
@@ -645,6 +708,123 @@
         }
 
     </script>
-    
+
+
+<script>
+    const labels = [
+        'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    // Fetch data from the Laravel controller
+    fetch('/chart-data')
+        .then(response => response.json())
+        .then(data => {
+            // Convert data values to numbers
+            const numericData = data.data.map(value => Number(value));
+
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Transaction By Month',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: numericData, // Use the fetched data here
+                }]
+            };
+
+            const config = {
+                type: 'line',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return 'Rp ' + Number(value).toLocaleString(); // Format the value as Rp
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+        })
+        .catch(error => console.error('Error fetching chart data:', error));
+</script>
+
+{{-- Transaction Today  --}}
+<script>
+    const label_hours = Array.from({ length: 24 }, (_, i) => i + ':00'); // Labels for each hour
+
+    fetch('/dashboard-chart-data-today')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Convert data values to numbers
+            const data_chart_per_hour = data.map(value => Number(value));
+
+            const chartData = {
+                labels: label_hours,
+                datasets: [{
+                    label: 'Transaction By Hour',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: data_chart_per_hour, // Use the fetched data here
+                }]
+            };
+
+            var options = {
+                // animation: false,
+                
+                function(label){return label.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+                
+            };
+
+            const config = {
+                type: 'line',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return 'Rp ' + Number(value).toLocaleString('id-ID'); // Format the value as Rp
+                                }
+                            }
+                        }
+                    },
+
+                }
+            };
+
+            new Chart(
+                document.getElementById('DashboardChartTransactionToday'),
+                config
+            );
+
+            // Show a success alert
+        })
+        .catch(error => {
+            console.error('Error fetching chart data:', error);
+            // Show an error alert
+        });
+
+    // Function to format numeric values as Rupiah
+    function formatRupiah(value) {
+        return 'Rp ' + Number(value).toLocaleString('id-ID');
+    }
+</script>
+
+
     
 @endpush

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use App\Models\Transaction;
 
 class DashboardController extends Controller
 {
@@ -18,13 +19,35 @@ class DashboardController extends Controller
         $data['transactions'] = DB::table('transactions')
         ->whereDate('created_at', Carbon::today())
         ->count();
+        $data['transaction_yesterday'] = DB::table('transactions')
+        ->whereDate('created_at', Carbon::yesterday())
+        ->count();
 
+            // Hitung total_price transaksi hari ini
+            $data['totalPriceToday'] = DB::table('transactions')
+            ->whereDate('created_at', Carbon::today())
+            ->sum('total_price');
+
+            // Hitung total_price transaksi hari kemarin
+            $data['totalPriceYesterday'] = DB::table('transactions')
+                ->whereDate('created_at', Carbon::yesterday())
+                ->sum('total_price');
+
+            // Menghindari pembagian dengan nol
+            if ($data['totalPriceYesterday'] != 0) {
+                // Hitung persentase perubahan harga
+                $data['priceChangePercentage'] = (($data['totalPriceToday'] - $data['totalPriceYesterday']) / $data['totalPriceYesterday']) * 100;
+            } else {
+                // Atur persentase perubahan harga menjadi null atau nilai default yang sesuai
+                $data['priceChangePercentage'] = null;
+            }
+            $data['transaction_price_change_percentage'] = $data['priceChangePercentage'];
+
+        // ========================================
         $data['orders'] = DB::table('orders')
         ->whereDate('created_at', Carbon::today())
         ->count();
-        
 
-        // return $data;
         return response()->json($data);
 
     }
@@ -165,6 +188,45 @@ class DashboardController extends Controller
 
         return $data;
         
+    }
+
+    public function datacharttoday()
+    {
+        $currentDate = Carbon::today();
+        $chartData = [];
+    
+        for ($hour = 0; $hour < 24; $hour++) {
+            $startOfDay = $currentDate->copy()->hour($hour)->minute(0)->second(0);
+            $endOfDay = $currentDate->copy()->hour($hour)->minute(59)->second(59);
+    
+            $transactions = Transaction::whereBetween('created_at', [$startOfDay, $endOfDay])
+                ->sum('total_price');
+    
+            $chartData[] = $transactions;
+        }
+    
+        // Log the query results
+        \Log::info('Chart Data:', $chartData);
+    
+        return $chartData;
+    }
+
+    public function getChartData(Request $request)
+    {
+        $currentYear = date('Y');
+        $chartData = [];
+
+        // Fetch data for each month of the current year from the transactions table
+        for ($month = 1; $month <= 12; $month++) {
+            $transactions = Transaction::whereYear('created_at', $currentYear)
+                ->whereMonth('created_at', $month)
+                ->sum('total_price');
+
+            // You might want to adjust the sum() based on your actual column structure
+            $chartData[] = $transactions;
+        }
+
+        return response()->json(['data' => $chartData]);
     }
 
 }

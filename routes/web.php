@@ -22,7 +22,8 @@ Route::get('/dashboard-month', [DashboardController::class, 'dashboardmonth']);
 Route::get('/dashboard-quarter', [DashboardController::class, 'dashboardquater']);
 Route::get('/dashboard-semester', [DashboardController::class, 'dashboardsemester']);
 Route::get('/dashboard-year', [DashboardController::class, 'dashboardyear']);
-
+Route::get('/dashboard-chart-data-today', [DashboardController::class, 'datacharttoday']);
+Route::get('/chart-data', [DashboardController::class, 'getChartData']);
 
 
 Route::get('/master-login', [MasterLoginController::class, 'index']);
