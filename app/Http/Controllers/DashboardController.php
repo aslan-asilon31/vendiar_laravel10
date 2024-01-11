@@ -14,18 +14,121 @@ class DashboardController extends Controller
         return view('dashboard.index');
     }
 
-    public function dashboardtransaction(){
-        // dd($request->timePeriod);
+    public function dashboardtoday(){
+        $data['transactions'] = DB::table('transactions')
+        ->whereDate('created_at', Carbon::today())
+        ->count();
+
+        $data['orders'] = DB::table('orders')
+        ->whereDate('created_at', Carbon::today())
+        ->count();
         
 
+        // return $data;
+        return response()->json($data);
+
+    }
+
+    public function dashboardweek()
+    {
+        $startOfWeek = Carbon::now()->startOfWeek(); // Start of the current week
+        $endOfWeek = Carbon::now()->endOfWeek();     // End of the current week
+    
+        $data['transactions'] = DB::table('transactions')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->count();
+    
+        $data['orders'] = DB::table('orders')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->count();
+    
+        return response()->json($data);
+    }
+
+    public function dashboardmonth()
+    {
+        $startOfMonth = Carbon::now()->startOfMonth(); // Start of the current month
+        $endOfMonth = Carbon::now()->endOfMonth();     // End of the current month
+
+        $data['transactions'] = DB::table('transactions')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->count();
+
+        $data['orders'] = DB::table('orders')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->count();
+
+        return response()->json($data);
+    }
+
+    public function dashboardquarter()
+    {
+        $startOfQuarter = Carbon::now()->startOfQuarter(); // Start of the current quarter
+        $endOfQuarter = Carbon::now()->endOfQuarter();     // End of the current quarter
+
+        $data['transactions'] = DB::table('transactions')
+            ->whereBetween('created_at', [$startOfQuarter, $endOfQuarter])
+            ->count();
+
+        $data['orders'] = DB::table('orders')
+            ->whereBetween('created_at', [$startOfQuarter, $endOfQuarter])
+            ->count();
+
+        return response()->json($data);
+    }
+
+    public function dashboardsemester()
+    {
+        // Define the start and end months of each semester
+        $startOfFirstSemester = Carbon::now()->startOfYear();
+        $endOfFirstSemester = Carbon::now()->addMonths(5)->endOfMonth();
+
+        $startOfSecondSemester = Carbon::now()->addMonths(6)->startOfMonth();
+        $endOfSecondSemester = Carbon::now()->endOfYear();
+
+        // Check which semester we are currently in and set the start and end accordingly
+        if (Carbon::now()->month <= 5) {
+            $startOfSemester = $startOfFirstSemester;
+            $endOfSemester = $endOfFirstSemester;
+        } else {
+            $startOfSemester = $startOfSecondSemester;
+            $endOfSemester = $endOfSecondSemester;
+        }
+
+        $data['transactions'] = DB::table('transactions')
+            ->whereBetween('created_at', [$startOfSemester, $endOfSemester])
+            ->count();
+
+        $data['orders'] = DB::table('orders')
+            ->whereBetween('created_at', [$startOfSemester, $endOfSemester])
+            ->count();
+
+        return response()->json($data);
+    }
+
+    public function dashboardyear()
+    {
+        $startOfYear = Carbon::now()->startOfYear(); // Start of the current year
+        $endOfYear = Carbon::now()->endOfYear();     // End of the current year
+
+        $data['transactions'] = DB::table('transactions')
+            ->whereBetween('created_at', [$startOfYear, $endOfYear])
+            ->count();
+
+        $data['orders'] = DB::table('orders')
+            ->whereBetween('created_at', [$startOfYear, $endOfYear])
+            ->count();
+
+        return response()->json($data);
+    }
+
+    public function dashboardtransactionperiod(){
 
         $data['dataToday'] = [];
       
         $data['timePeriod'] = request('timePeriod');
         $data['startDate'] = request('startDate');
         $data['endDate'] = request('endDate');
-// dd($data);
-        // Set start date based on the selected time period
         switch ($data['timePeriod']) {
             case 'today':
                 $data['today'] = DB::table('transactions')
@@ -50,20 +153,7 @@ class DashboardController extends Controller
                 break;
         }
 
-        // dd($data['today']);
-
-    // $dataLastWeek = DB::table('transactions')
-    // ->whereBetween('created_at', [$startDate, $endDate])
-    // ->sum('total_price');
-
-
-
-        // $data_count = ($dataThisWeek - $dataLastWeek)/ $dataLastWeek * 100 ;
-
-        // $data = array($data_this_week, $data_count);
-        // return $data;
         return response()->json($data);
-
 
     }
 
@@ -72,8 +162,6 @@ class DashboardController extends Controller
         $data =  array('120','200');
 
         // $data = ($dataThisWeek - $dataLastWeek) / abs($dataLastWeek) * 100;
-
-        
 
         return $data;
         

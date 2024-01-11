@@ -12,13 +12,12 @@
             
             <label for="timePeriod">Select Time Period:</label>
             <select id="timePeriod" class="btn btn-sm btn-outline-primary " name="timePeriod">
-                <option value="" selected></option>
-                <option value="today" >today</option>
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="quarter">This Quarter</option>
-                <option value="semester">THis Semester</option>
-                <option value="year">This Year</option>
+                <option value="today" selected>today</option>
+                <option value="week" >This Week</option>
+                <option value="month" >This Month</option>
+                <option value="quarter" >This Quarter</option>
+                <option value="semester" >THis Semester</option>
+                <option value="year" >This Year</option>
             </select>
         
             <label for="startDate">Select Start Date:</label>
@@ -34,9 +33,9 @@
         <div class="card bg-gradient-danger card-img-holder text-white">
           <div class="card-body">
             <img src="{{ asset('backend/assets/images/dashboard/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3"><span id="thisWeekTransaction"></span> Transaction <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+            <h4 class="font-weight-normal mb-3"> Transaction <i class="mdi mdi-chart-line mdi-24px float-right"></i>
             </h4>
-            <h2 class="mb-5">Rp  <span id="Transaction"></span> </h2>
+            <h2 class="mb-5"><span id="TransactionPeriod"></span> <span id="TransactionAll"></span> </h2>
             <div class="tooltip-container card-text">
                 <span class="tooltip-trigger" data-tooltip-src="{{ asset('info/info1.png') }}">Increased <span id="WeeklyTransactionChangePrecentage"></span> %</span>
             </div>
@@ -47,9 +46,9 @@
         <div class="card bg-gradient-info card-img-holder text-white">
           <div class="card-body">
             <img src="{{ asset('backend/assets/images/dashboard/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3">Weekly Orders <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+            <h4 class="font-weight-normal mb-3">Orders <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
             </h4>
-            <h2 class="mb-5">45,6334</h2>
+            <h2 class="mb-5"><span id="OrderAll"></span></h2>
             <h6 class="card-text">Decreased by 10%</h6>
           </div>
         </div>
@@ -384,13 +383,9 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            loadDataTransaction()
+            loadDataToday()
             setDefaultDateRange()
-
         });
-
-
-
     </script>
 
 
@@ -442,19 +437,50 @@
         }
 
         $('#timePeriod').on('change', function () {
-            var startDate = $('#startDate').val(null);
-            var endDate = $('#endDate').val(null);
-            // loadDataTransaction();
+            // var startDate = $('#startDate').val(null);
+            // var endDate = $('#endDate').val(null);
+
+
+            $('#timePeriod').on('change', function () {
+                // Get the selected value from the dropdown
+                var selectedValue = $(this).val();
+
+                // Call the appropriate function based on the selected value
+                switch (selectedValue) {
+                    case 'today':
+                        loadDataToday();
+                        break;
+                    case 'week':
+                        loadDataWeek();
+                        break;
+                    case 'month':
+                        loadDataMonth();
+                        break;
+                    case 'quarter':
+                        loadDataQuarter();
+                        break;
+                    case 'semester':
+                        loadDataSemester();
+                        break;
+                    case 'year':
+                        loadDataYear();
+                        break;
+                    default:
+                        // Handle any additional cases or provide a default action
+                        break;
+                }
+            });
+
         });
 
         $('#startDate').on('change', function () {
             $('#timePeriod').prop('selectedIndex', 0);
-            loadDataTransaction();
+            // loadDataTransaction();
         });
 
         $('#endDate').on('change', function () {
             $('#timePeriod').prop('selectedIndex', 0);
-            loadDataTransaction();
+            // loadDataTransaction();
         });
 
         // $('#thisWeekTransaction').on('change', function () {
@@ -462,31 +488,154 @@
         //     loadDataTransaction();
         // });
 
-        function loadDataTransaction() {
-            // var timePeriodSelect = $('#timePeriod').val();
-            // var startDate = $('#startDate').val();
-            // var endDate = $('#endDate').val();
-    	    // var timePeriodSelect_text	= $("#thisWeekTransaction").html(timePeriodSelect);
-
-            // Add your AJAX request here using the selected time period, start date, and end date
+        function loadDataToday() {
             $.ajax({
-                url: '/dashboard-transaction',
+                url: '/dashboard-today',
                 method: 'GET',
-                data: {
-                    timePeriod: timePeriodSelect,
-                    startDate: startDate,
-                    endDate: endDate
-                },
                 success: function (response) {
-                    var todayValue = response.today;
-                    alert(todayValue);
-
-                    if (Array.isArray(response) && response.length > 0 && !isNaN(response[0])) {
-                        $('#Transaction').html(todayValue);
-                        $('#WeeklyTransactionChangePrecentage').html(response[1]);
+                    if (!isNaN(response.transactions)) {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html('Today : '+response.transactions);
                     } else {
-                        $('#Transaction').html(0);
-                        $('#WeeklyTransactionChangePrecentage').html(0);
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html(0);
+                    }
+                    if (!isNaN(response.orders)) {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html('Today : '+response.orders);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html(0);
+                    }
+                },
+                error: function (error) {
+                    $('#WeeklyTransaction').html(0);
+                }
+            });
+        }
+
+        function loadDataWeek() {
+            $.ajax({
+                url: '/dashboard-week',
+                method: 'GET',
+                success: function (response) {
+                    if (!isNaN(response.transactions)) {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html('Week : '+response.transactions);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html(0);
+                    }
+                    if (!isNaN(response.orders)) {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html('Week : '+response.orders);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html(0);
+                    }
+                },
+                error: function (error) {
+                    $('#WeeklyTransaction').html(0);
+                }
+            });
+        }
+
+        function loadDataMonth() {
+            $.ajax({
+                url: '/dashboard-month',
+                method: 'GET',
+                success: function (response) {
+                    if (!isNaN(response.transactions)) {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html('Month : '+response.transactions);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html(0);
+                    }
+                    if (!isNaN(response.orders)) {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html('Month : '+response.orders);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html(0);
+                    }
+                },
+                error: function (error) {
+                    $('#WeeklyTransaction').html(0);
+                }
+            });
+        }
+
+        function loadDataQuarter() {
+            $.ajax({
+                url: '/dashboard-quarter',
+                method: 'GET',
+                success: function (response) {
+                    if (!isNaN(response.transactions)) {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html('Quarter : '+response.transactions);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html(0);
+                    }
+                    if (!isNaN(response.orders)) {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html('Quarter : '+response.orders);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html(0);
+                    }
+                },
+                error: function (error) {
+                    $('#WeeklyTransaction').html(0);
+                }
+            });
+        }
+
+        function loadDataSemester() {
+            $.ajax({
+                url: '/dashboard-semester',
+                method: 'GET',
+                success: function (response) {
+                    if (!isNaN(response.transactions)) {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html('Semester : '+response.transactions);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html(0);
+                    }
+                    if (!isNaN(response.orders)) {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html('Semester : '+response.orders);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html(0);
+                    }
+                },
+                error: function (error) {
+                    $('#WeeklyTransaction').html(0);
+                }
+            });
+        }
+
+        function loadDataYear() {
+            $.ajax({
+                url: '/dashboard-year',
+                method: 'GET',
+                success: function (response) {
+                    if (!isNaN(response.transactions)) {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html('Year : '+response.transactions);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#TransactionAll').html(0);
+                    }
+                    if (!isNaN(response.orders)) {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html('Year : '+response.orders);
+                    } else {
+                        $('#TransactionPeriod').hide();
+                        $('#OrderAll').html(0);
                     }
                 },
                 error: function (error) {

@@ -16,7 +16,12 @@ use App\Http\Controllers\MasterData\StockMasterController;
 use App\Http\Controllers\Auth\SocialiteController;
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
-Route::get('/dashboard-transaction', [DashboardController::class, 'dashboardtransaction']);
+Route::get('/dashboard-today', [DashboardController::class, 'dashboardtoday']);
+Route::get('/dashboard-week', [DashboardController::class, 'dashboardweek']);
+Route::get('/dashboard-month', [DashboardController::class, 'dashboardmonth']);
+Route::get('/dashboard-quarter', [DashboardController::class, 'dashboardquater']);
+Route::get('/dashboard-semester', [DashboardController::class, 'dashboardsemester']);
+Route::get('/dashboard-year', [DashboardController::class, 'dashboardyear']);
 
 
 
