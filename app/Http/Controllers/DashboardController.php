@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use App\Models\Transaction;
+use App\Models\Order;
 
 class DashboardController extends Controller
 {
@@ -17,36 +18,65 @@ class DashboardController extends Controller
 
     public function dashboardtoday(){
         $data['transactions'] = DB::table('transactions')
-        ->whereDate('created_at', Carbon::today())
-        ->count();
-        $data['transaction_yesterday'] = DB::table('transactions')
-        ->whereDate('created_at', Carbon::yesterday())
-        ->count();
-
-            // Hitung total_price transaksi hari ini
-            $data['totalPriceToday'] = DB::table('transactions')
             ->whereDate('created_at', Carbon::today())
-            ->sum('total_price');
+        ->count();
 
-            // Hitung total_price transaksi hari kemarin
-            $data['totalPriceYesterday'] = DB::table('transactions')
-                ->whereDate('created_at', Carbon::yesterday())
-                ->sum('total_price');
+        $data['transaction_yesterday'] = DB::table('transactions')
+            ->whereDate('created_at', Carbon::yesterday())
+        ->count();
 
-            // Menghindari pembagian dengan nol
-            if ($data['totalPriceYesterday'] != 0) {
+        // Hitung total_price transaksi hari ini
+        $data['totalPriceToday'] = DB::table('transactions')
+            ->whereDate('created_at', Carbon::today())
+        ->sum('total_price');
+
+        // Hitung total_price transaksi hari kemarin
+        $data['totalPriceYesterday'] = DB::table('transactions')
+            ->whereDate('created_at', Carbon::yesterday())
+        ->sum('total_price');
+
+        // Menghindari pembagian dengan nol
+        if ($data['totalPriceYesterday'] != 0) {
                 // Hitung persentase perubahan harga
                 $data['priceChangePercentage'] = (($data['totalPriceToday'] - $data['totalPriceYesterday']) / $data['totalPriceYesterday']) * 100;
             } else {
                 // Atur persentase perubahan harga menjadi null atau nilai default yang sesuai
                 $data['priceChangePercentage'] = null;
-            }
-            $data['transaction_price_change_percentage'] = $data['priceChangePercentage'];
+        }
 
-        // ========================================
+        $data['transaction_price_change_percentage'] = $data['priceChangePercentage'];
+
+        // ===================ORDERs =====================
         $data['orders'] = DB::table('orders')
-        ->whereDate('created_at', Carbon::today())
+            ->whereDate('created_at', Carbon::today())
         ->count();
+
+        
+        $data['order_yesterday'] = DB::table('orders')
+            ->whereDate('created_at', Carbon::yesterday())
+        ->count();
+
+        
+        // Hitung total_price order hari ini
+        $data['totalPriceTodayOrder'] = DB::table('orders')
+            ->whereDate('created_at', Carbon::today())
+        ->sum('total_price');
+
+        // Hitung total_price order hari kemarin
+        $data['totalPriceYesterdayOrder'] = DB::table('orders')
+            ->whereDate('created_at', Carbon::yesterday())
+        ->sum('total_price');
+
+        // Menghindari pembagian dengan nol
+        if ($data['totalPriceYesterdayOrder'] != 0) {
+                // Hitung persentase perubahan harga
+                $data['priceChangePercentageOrder'] = (($data['totalPriceTodayOrder'] - $data['totalPriceYesterdayOrder']) / $data['totalPriceYesterdayOrder']) * 100;
+            } else {
+                // Atur persentase perubahan harga menjadi null atau nilai default yang sesuai
+                $data['priceChangePercentageOrder'] = null;
+        }
+
+        $data['order_price_change_percentage'] = $data['priceChangePercentageOrder'];
 
         return response()->json($data);
 
@@ -200,7 +230,7 @@ class DashboardController extends Controller
             $endOfDay = $currentDate->copy()->hour($hour)->minute(59)->second(59);
     
             $transactions = Transaction::whereBetween('created_at', [$startOfDay, $endOfDay])
-                ->sum('total_price');
+                ->count();
     
             $chartData[] = $transactions;
         }
@@ -220,13 +250,49 @@ class DashboardController extends Controller
         for ($month = 1; $month <= 12; $month++) {
             $transactions = Transaction::whereYear('created_at', $currentYear)
                 ->whereMonth('created_at', $month)
-                ->sum('total_price');
+                ->count();
 
             // You might want to adjust the sum() based on your actual column structure
             $chartData[] = $transactions;
         }
 
         return response()->json(['data' => $chartData]);
+    }
+
+    public function datachartorder(){
+        // $data = Order::groupBy('status_id')
+        // ->select(DB::raw('count(*) as count'), 'status_id')
+        // ->pluck('count', 'status_id');
+
+        // $data = DB::table('orders')
+        //     ->leftJoin('status_masters', 'orders.status_id', '=', 'status_masters.status_id')
+        //     ->groupBy('orders.status_id', 'status_masters.name')
+        //     ->select(DB::raw('count(*) as count'), 'orders.status_id', 'status_masters.name')
+        //     ->pluck('count', 'status_masters.name');
+
+        $queryResult = DB::table('orders')
+        ->leftJoin('status_masters', 'orders.status_id', '=', 'status_masters.status_id')
+        ->groupBy('orders.status_id', 'status_masters.name')
+        ->select(DB::raw('count(*) as count'), 'orders.status_id', 'status_masters.name')
+        ->orderByDesc('count')
+        ->limit(3)
+        ->get();
+    
+        // Extract labels and counts from the query result
+        $data['labels'] = $queryResult->pluck('name')->toArray();
+        $data['counts'] = $queryResult->pluck('count')->toArray();
+
+        // dd($data);
+
+        return response()->json($data);
+
+
+    //     $statusLabels = Order::getStatusLabels(); // Define this function in your Order model
+
+    //     return response()->json([
+    //         'labels' => $statusLabels,
+    //         'counts' => $statusCounts->toArray(),
+    //     ]);
     }
 
 }

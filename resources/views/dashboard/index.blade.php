@@ -52,10 +52,17 @@
         <div class="card bg-gradient-info card-img-holder text-white">
           <div class="card-body">
             <img src="{{ asset('backend/assets/images/dashboard/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3">Orders <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-            </h4>
-            <h2 class="mb-5"><span id="OrderAll"></span></h2>
-            <h6 class="card-text">Decreased by 10%</h6>
+            <h2 class="font-weight-normal mb-3">Orders <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+            </h2>
+            <h6 class="mb-5"><span id="OrderAll"></span> <br> 
+                <span id="OrderAllSum"></span> 
+                <span id="OrderAllYesterday"></span> <br> 
+                <span id="OrderAllSumYesterday"></span> 
+            </h6>
+            <div class="tooltip-container card-text">
+                <span class="tooltip-trigger" data-tooltip-src=""><i class="mdi mdi-information "></i>  </span>
+            </div>
+            <span id="order_price_change_percentage"></span>
           </div>
         </div>
       </div>
@@ -84,14 +91,13 @@
         </div>
       </div>
       <div class="col-md-5 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Traffic Sources</h4>
-            <canvas id="traffic-chart"></canvas>
-            <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
-          </div>
-        </div>
-      </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">The Most Status Order</h4>
+                    <canvas id="status-chart-order"></canvas>
+                </div>
+            </div>
+     </div>
 
     </div>
 
@@ -546,15 +552,19 @@
                 url: '/dashboard-today',
                 method: 'GET',
                 success: function (response) {
+
+                    // alert(response.priceChangePercentageOrder)
+                    var tolerance = 0.0001;
+
                     if (!isNaN(response.transactions)) {
                         $('#TransactionPeriod').hide();
                         $('#TransactionAll').html('Today : '+response.transactions+' Transaction');
                         $('#TransactionAllSum').html('Today Sum : '+formatRupiah(response.totalPriceToday));
                         $('#TransactionAllYesterday').html('Yesterday : '+response.transaction_yesterday+' Transaction');
                         $('#TransactionAllSumYesterday').html('Yesterday Sum : '+formatRupiah(response.totalPriceYesterday));
-                        if(response.priceChangePercentage > 0){
+                        if(response.priceChangePercentage > tolerance){
                             $('#transaction_price_change_percentage').html(' <i class=" mdi mdi-arrow-up-bold " style="color:green;"></i> '+Math.ceil(response.transaction_price_change_percentage)+' % from Yesterday');
-                        }else if(response.priceChangePercentage < 0){
+                        }else if(response.priceChangePercentage < tolerance){
                             $('#transaction_price_change_percentage').html('<i class=" mdi mdi-arrow-down-bold " style="color:red;"></i> '+Math.ceil(response.transaction_price_change_percentage)+' % from Yesterday');
                         }else{
                             console.log('')
@@ -565,7 +575,17 @@
                     }
                     if (!isNaN(response.orders)) {
                         $('#TransactionPeriod').hide();
-                        $('#OrderAll').html('Today : '+response.orders);
+                        $('#OrderAll').html('Today : '+response.orders+' Order');
+                        $('#OrderAllSum').html('Today Sum : '+formatRupiah(response.totalPriceTodayOrder));
+                        $('#OrderAllYesterday').html('Yesterday : '+response.order_yesterday+' Order');
+                        $('#OrderAllSumYesterday').html('Yesterday Sum : '+formatRupiah(response.totalPriceYesterdayOrder));
+                        if(response.priceChangePercentageOrder > tolerance){
+                            $('#order_price_change_percentage').html(' <i class=" mdi mdi-arrow-up-bold " style="color:green;"></i> '+Math.ceil(response.order_price_change_percentage)+' % from Yesterday');
+                        }else if(response.priceChangePercentageOrder < tolerance){
+                            $('#order_price_change_percentage').html('<i class=" mdi mdi-arrow-down-bold " style="color:red;"></i> '+Math.ceil(response.order_price_change_percentage)+' % from Yesterday');
+                        }else{
+                            $('#order_price_change_percentage').html(' '+Math.ceil(response.order_price_change_percentage)+' % from Yesterday');
+                        }
                     } else {
                         $('#TransactionPeriod').hide();
                         $('#OrderAll').html(0);
@@ -823,6 +843,51 @@
     function formatRupiah(value) {
         return 'Rp ' + Number(value).toLocaleString('id-ID');
     }
+</script>
+
+
+<script>
+
+fetch('/dashboard-status-chart-data-order') // Update the URL based on your Laravel route
+    .then(response => response.json())
+    .then(data => {
+        // Generate dynamic colors based on the length of the labels array
+        const dynamicColors = Array.from({ length: data.labels.length }, (_, index) => getRandomColor(index));
+
+        // Create a pie chart
+        const ctx = document.getElementById('status-chart-order').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Status Orders',
+                    backgroundColor: dynamicColors,
+                    borderColor: dynamicColors,
+                    data: data.counts,
+                }]
+            },
+            options: {
+                // Your existing options
+            }
+        });
+    })
+    .catch(error => console.error('Error fetching status chart data:', error));
+
+    // Function to generate a random color
+    function getRandomColor(index) {
+        const colors = [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(153, 102, 255)',
+            'rgb(255, 159, 64)',
+        ];
+
+    return colors[index % colors.length];
+}
+
 </script>
 
 

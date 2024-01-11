@@ -1,5 +1,7 @@
 # Lumina App by Aslan : Your Radiant Source of Illumination! At Lumina, we believe in the transformative power of light. 
 
+![gif2](https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/be280b99-7356-4aba-a24c-369bf5ccc0f1)
+
 
 
 <div class="">
