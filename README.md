@@ -1,5 +1,14 @@
 # Lumina App by Aslan : Your Radiant Source of Illumination! At Lumina, we believe in the transformative power of light. 
 
+Laravel : https://github.com/aslan-asilon31/lumina_laravel10/tree/development
+Codeigniter : https://github.com/aslan-asilon31/lumina_codeigniter3/tree/development
+Django : https://github.com/aslan-asilon33/lumina_django
+ReactJS : https://github.com/aslan-asilon34/lumina_reactjs
+VueJS : https://github.com/aslan-asilon34/lumina_vuejs
+AngularJS : https://github.com/aslan-asilon34/lumina_angularjs
+
+<hr>
+
 ![gif2](https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/be280b99-7356-4aba-a24c-369bf5ccc0f1)
 
 
