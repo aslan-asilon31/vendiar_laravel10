@@ -11,10 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
+    
     <!-- Layout styles -->
     @stack('css')
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css'); }}">
@@ -47,7 +44,7 @@
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="{{ asset('backend/assets/images/faces/face1.jpg'); }}" alt="image">
+                  <img src="{{ asset('aslan1.jpeg'); }}" alt="image">
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
@@ -77,7 +74,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
-                    <img src="{{ asset('backend/assets/images/faces/face4.jpg'); }}" alt="image" class="profile-pic">
+                    <img src="{{ asset('aslan1.jpeg'); }}" alt="image" class="profile-pic">
                   </div>
                   <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                     <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a message</h6>
@@ -87,7 +84,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
-                    <img src="{{ asset('backend/assets/images/faces/face2.jpg'); }}" alt="image" class="profile-pic">
+                    <img src="{{ asset('aslan1.jpeg'); }}" alt="image" class="profile-pic">
                   </div>
                   <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                     <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a message</h6>
@@ -97,7 +94,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
-                    <img src="{{ asset('backend/assets/images/faces/face3.jpg'); }}" alt="image" class="profile-pic">
+                    <img src="{{ asset('aslan1.jpeg'); }}" alt="image" class="profile-pic">
                   </div>
                   <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                     <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture updated</h6>
@@ -179,7 +176,7 @@
             <li class="nav-item nav-profile">
               <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                  <img src="{{ asset('backend/assets/images/faces/face1.jpg'); }}" alt="profile">
+                  <img src="{{ asset('aslan1.jpeg'); }}" alt="profile">
                   <span class="login-status online"></span>
                   <!--change to offline or busy as needed-->
                 </div>
@@ -206,12 +203,6 @@
               <a class="nav-link" href="{{ route('users.index') }}">
                 <span class="menu-title">Order</span>
                 <i class="mdi mdi-shopping menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('users.index') }}">
-                <span class="menu-title">User</span>
-                <i class="mdi mdi-account menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">

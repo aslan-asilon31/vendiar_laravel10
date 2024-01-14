@@ -8,34 +8,55 @@
 
     <div class="card">
       <div class="card-body">
-        <button type="button" class="btn btn-gradient-primary btn-fw collapsible" style="width: 100%">Advanced Search</button>
-        <div class="content" style="display: none; padding:20px; background-color:indigo;" >
+        <div id="add-new-properties"></div>
+        <div class="row col-lg-12" style="display: flex;text-align:center;">
+        
+          <div class="col-lg-12">
+            
+            <div class="btn btn-gradient-primary" style="display: flex;">
+              <label for="exampleFormControlSelect2">Select Action </label>
+              <select class="form-control " style="width: 100%;" id="exampleFormControlSelect2">
+                <option> - </option>
+                <option> <a href="">Add User</a> </option>
+                <option> <a href="">Export Excel User</a> </option>
+                <option> <a href="">Import Excel User</a> </option>
+                <option> <a href="">Export CSV User</a> </option>
+                <option> <a href="">Import CSV User</a> </option>
+                <option> <a href="">Export PDF User</a> </option>
+              </select>
+            </div>
 
+          </div>
           
-            <div class="row">
-                <div class="col-6" style="margin-top:10px">
-                    <input type="text" name="name" class="form-control searchName" placeholder="Search for Name Only...">
-                </div>
-                <div class="col-6" style="margin-top:10px">
-                    <input type="text" name="email" class="form-control searchEmail" placeholder="Search for Email Only...">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6" style="margin-top:10px">
-                    <input type="text" name="role_id" class="form-control searchRoleId" placeholder="Search for Role Only...">
-                </div>
-                <div class="col-6" style="margin-top: 10px">
-                    <select name="status" class="form-select searchStatus">
-                        <option value="">Select Status</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
-                </div>
-            </div>
+          <span class="col-lg-122">
+              <a type="button" class="btn btn-gradient-primary btn-fw collapsible" style="width: 100%">Advanced Search</a>
+              <div class="content" style="display: none; padding:20px; background-color:indigo;">
+                  <div class="row">
+                      <div class="col-6" style="margin-top:10px">
+                          <input type="text" name="name" class="form-control searchName" placeholder="Search for Name Only...">
+                      </div>
+                      <div class="col-6" style="margin-top:10px">
+                          <input type="text" name="email" class="form-control searchEmail" placeholder="Search for Email Only...">
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-6" style="margin-top:10px">
+                          <input type="text" name="role_id" class="form-control searchRoleId" placeholder="Search for Role Only...">
+                      </div>
+                      <div class="col-6" style="margin-top: 10px">
+                          <select name="status" class="form-select searchStatus">
+                              <option value="">Select Status</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+          </span>
+
+
         </div>
 
-        <a href="{{ route('users.create') }}">Add User</a>
-        <a href="{{ route('users.export') }}">Export User</a>
         
         <table class="table table-bordered" id="datatable-crud">
           <thead>
@@ -45,7 +66,6 @@
                 <th>Image</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Created at</th>
                 <th>Action</th>
              </tr>
           </thead>
@@ -74,57 +94,67 @@
 <script type="text/javascript">
      
   $(document).ready( function () {
-   $.ajaxSetup({
-     headers: {
-     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-     }
-   });
-     $('#datatable-crud').DataTable({
+    $.ajaxSetup({
+      headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    
+    $('#datatable-crud').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ url('users-list') }}",
             columns: [
-                    //  { data: 'id', name: 'id' },
                      { data: 'name', name: 'name' },
                      {
-                        data: 'image', // Assuming image data is directly available
+                        data: 'image', 
                         name: 'image',
                         render: function (data, type, row) {
-                          return `<img src="{{ asset('${data}')}}" class="rounded" style="width: 50px;height:50px; ">`; // Use Storage::url without "public/users/"
+                              if (data) {
+                                return `<img src="{{ asset('${data}')}}" class="rounded" style="width: 50px;height:50px; ">`;
+                              } else {
+                                return `<img src="{{ asset('avatar-3d/man4.png')}}" class="rounded" style="width: 50px;height:50px; ">`;
+                              }
                         },
                       },
                      { data: 'email', name: 'email' },
-                     { data: 'role', name: 'role' },
-                     { data: 'created_at', name: 'created_at' },
+                     { data: 'role_name', name: 'role_name' },
                      {data: 'action', name: 'action', orderable: false},
                   ],
+                  initComplete: function () {
+                      // Place the DataTable on the top of the table
+                      $('#add-new-properties').prepend($('#add-new-properties').find('.dataTables_wrapper'));
+                  },
                   order: [[1, 'asc']]
         });
  
-     $('body').on('click', '.delete', function () {
- 
-        if (confirm("Delete Record?") == true) {
-         var id = $(this).data('id');
-          
-         // ajax
-         $.ajax({
-             type:"POST",
-             url: "{{ url('delete-user') }}",
-             data: {
-                    _token: "{{ csrf_token() }}",
-                    id: id
-                },
-             dataType: 'json',
-             success: function(res){
- 
-               var oTable = $('#datatable-crud').dataTable();
-               oTable.fnDraw(false);
+        $('body').on('click', '.delete', function () {
+    
+            if (confirm("Delete Record?") == true) {
+            var id = $(this).data('id');
+              
+            // ajax
+            $.ajax({
+                type:"POST",
+                url: "{{ url('delete-user') }}",
+                data: {
+                        _token: "{{ csrf_token() }}",
+                        id: id
+                    },
+                dataType: 'json',
+                success: function(res){
+    
+                  var oTable = $('#datatable-crud').dataTable();
+                  oTable.fnDraw(false);
+                }
+            });
             }
-         });
-        }
- 
-      });
-   });
+    
+    });
+
+
+  });
  
 </script>
 

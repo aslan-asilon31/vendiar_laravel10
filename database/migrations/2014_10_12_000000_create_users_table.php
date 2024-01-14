@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('place_bird')->nullable();
             $table->string('gender')->nullable();
             $table->string('role')->nullable();
+            $table->string('department')->nullable();
+            $table->string('section')->nullable();
             $table->string('phone')->nullable();
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();

@@ -4,22 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRolesMastersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('roles_masters', function (Blueprint $table) {
+        Schema::create('department_masters', function (Blueprint $table) {
             $table->id();
-            $table->string('roles_id')->nullable();
+            $table->string('department_id')->nullable();
             $table->string('status_id')->nullable();
             $table->string('name')->nullable();
             $table->string('lang')->nullable();
             $table->string('lang_id')->nullable();
+            $table->string('desc')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,11 +26,9 @@ class CreateRolesMastersTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('roles_masters');
+        Schema::dropIfExists('department_masters');
     }
-}
+};

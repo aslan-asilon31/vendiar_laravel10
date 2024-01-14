@@ -41,5 +41,13 @@
 ![lumina-dashboard](https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/c2c5a431-29fa-49f2-a176-280732aede3b)
 
 
+
+![lumina_user_list](https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/f0eb9ea2-12e3-4171-ab8c-a347ec12185a)
+
+![lumina_user_edit](https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/8d09e649-0358-424d-892e-542644f80158)
+
+![lumina_user_detail](https://github.com/aslan-asilon31/lumina_laravel10/assets/116990574/870ac18a-3e7b-4056-9db5-8f484cb9992d)
+
+
 </div>
 

@@ -33,7 +33,7 @@ class UserController extends Controller
 
         if(request()->ajax()) {
 
-            $query = "SELECT a.user_id as user_id,a.name,a.email,c.image as image,a.created_at, b.name as role 
+            $query = "SELECT a.user_id as user_id,a.name,a.email,c.image as image,a.created_at, b.name as role_name 
                         FROM users a
                         LEFT JOIN roles_masters b ON a.role = b.roles_id
                         LEFT JOIN image_masters c ON a.image = c.image_master_id
@@ -107,23 +107,53 @@ class UserController extends Controller
                         ->with('success','User has been created successfully.');
     }
 
-    public function show(User $user)
+
+    public function show(Request $request)
     {
+        $user = User::select('users.*',
+                    'roles_masters.roles_id as role_id',
+                    'roles_masters.name as role_name',
+                    'department_masters.name as department_name',
+                    'section_masters.name as section_name',
+                )
+        ->where('users.user_id', $request->user_id)
+        ->leftJoin('roles_masters', 'users.role', '=', 'roles_masters.roles_id')
+        ->leftJoin('image_masters', 'users.image', '=', 'image_masters.image_master_id')
+        ->leftJoin('department_masters', 'users.department', '=', 'department_masters.department_id')
+        ->leftJoin('section_masters', 'users.section', '=', 'section_masters.section_id')
+        ->first();
+    
+        if (!$user) {
+            abort(404); 
+        }
+    
         return view('users.show',compact('user'));
-    } 
+    }
 
 
     public function edit(Request $request)
     {
-        $user = User::where('user_id', $request->user_id)->first();
+        $user = User::select('users.*',
+                    'status_masters.name as status_name',
+                    'roles_masters.roles_id as role_id',
+                    'roles_masters.name as role_name',
+                    'department_masters.name as department_name',
+                    'section_masters.name as section_name',
+                )
+        ->where('users.user_id', $request->user_id)
+        ->leftJoin('status_masters', 'users.status_id', '=', 'status_masters.status_id')
+        ->leftJoin('roles_masters', 'users.role', '=', 'roles_masters.roles_id')
+        ->leftJoin('image_masters', 'users.image', '=', 'image_masters.image_master_id')
+        ->leftJoin('department_masters', 'users.department', '=', 'department_masters.department_id')
+        ->leftJoin('section_masters', 'users.section', '=', 'section_masters.section_id')
+        ->first();
+    
 
-        // Check if the user exists
         if (!$user) {
             abort(404); // or handle the case when user is not found
         }
     
-        // Now you can work with the $user object
-        return view('users.edit',compact('user'));
+        return view('users.edit_advance',compact('user'));
     }
 
     public function update(Request $request,User $user)

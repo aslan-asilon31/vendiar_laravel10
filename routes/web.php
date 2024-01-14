@@ -39,6 +39,7 @@ Route::resource('transactions', TransactionController::class);
 
 // Route::resource('users', UserController::class);
 Route::get('users/edit', [UserController::class,'edit'])->name('users.edit');
+Route::get('users/show', [UserController::class,'show'])->name('users.show');
 Route::get('users', [UserController::class,'index'])->name('users.index');
 Route::get('users/create', [UserController::class,'create'])->name('users.create');
 Route::put('users/{user}', [UserController::class,'update'])->name('users.update');
