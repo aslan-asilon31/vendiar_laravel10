@@ -5,17 +5,19 @@
 
 
 <div class="">
-<ol>
-<a href="#screenshoot">  Screenshoots »</a>
-</ol>
+<ul>
+    <li>
+        <a href="#screenshoot">  Screenshoots »</a>
+    </li>
+    <li>
+        <a href="#features">  Features </a>
+    </li>
+    <li>
+        <a href="#analysis">  system analysis and design </a>
+    </li>
 
-<ol>
-<a href="#features">  Features </a>
-</ol>
+</ul>
 
-<ol>
-<a href="#analysis">  system analysis and design </a>
-</ol>
 </div>
 
 
