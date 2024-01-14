@@ -222,6 +222,12 @@
                   </ul>
                 </div>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('backup.index') }}">
+                  <span class="menu-title">Backup Data</span>
+                  <i class="mdi mdi-database menu-icon"></i>
+                </a>
+              </li>
             <li class="nav-item">
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

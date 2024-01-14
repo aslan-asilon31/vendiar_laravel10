@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DashboardController;
@@ -30,6 +31,8 @@ Route::get('/dashboard-status-chart-data-order', [DashboardController::class, 'd
 
 Route::get('/master-login', [MasterLoginController::class, 'index']);
 Route::get('/order', [OrderController::class, 'index']);
+Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
+Route::get('/backup-manual', [BackupController::class, 'backupManual'])->name('backup.manual');
 // Route::get('/users', [UserController::class, 'index'])->name('user.name');
 
 Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider']);
