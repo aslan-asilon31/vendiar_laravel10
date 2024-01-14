@@ -17,7 +17,11 @@ class User extends Authenticatable
         return $this->hasMany(SocialAccount::class);
     }
     
+    
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
     protected $fillable = [
+        'user_id',
         'name',
         'email',
         'password',

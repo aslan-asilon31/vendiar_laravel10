@@ -197,7 +197,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('users.index') }}">
+              <a class="nav-link" href="{{ route('transactions.index') }}">
                 <span class="menu-cash-multiple">Transaction</span>
                 <i class="mdi mdi-account menu-icon"></i>
               </a>
@@ -226,7 +226,7 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ route('rolemasters.index') }}">Role Master</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ route('brandmasters.index') }}">Brand Master</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ route('imagemasters.index') }}">Gallery Master</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('bankmasters.index') }}">Bank Master</a></li>
+                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ route('bankmasters.index') }}">Bank Master</a></li> --}}
                     <li class="nav-item"> <a class="nav-link" href="{{ route('regionmasters.index') }}">Region Master</a></li>
                   </ul>
                 </div>

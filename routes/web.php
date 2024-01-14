@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DashboardController;
 
 use App\Http\Controllers\MasterData\MasterLoginController;
@@ -34,7 +35,13 @@ Route::get('/order', [OrderController::class, 'index']);
 Route::get('/auth/{provider}', [SocialiteController::class, 'redirectToProvider']);
 Route::get('/auth/{provider}/callback', [SocialiteController::class, 'handleProvideCallback']);
 
-Route::resource('users', UserController::class);
+Route::resource('transactions', TransactionController::class);
+
+// Route::resource('users', UserController::class);
+Route::get('users/edit', [UserController::class,'edit'])->name('users.edit');
+Route::get('users', [UserController::class,'index'])->name('users.index');
+Route::get('users/create', [UserController::class,'create'])->name('users.create');
+Route::put('users/{user}', [UserController::class,'update'])->name('users.update');
 Route::post('delete-user', [UserController::class,'destroy']);
 Route::get('users-list', [UserController::class,'getdata'])->name('users.list');
 Route::get('/users-export', [UserController::class, 'export'])->name('users.export');
@@ -52,9 +59,9 @@ Route::resource('imagemasters', ImageMasterController::class);
 Route::post('delete-imagemaster', [ImageMasterController::class,'destroy']);
 Route::get('imagemasters-list', [ImageMasterController::class,'getdata'])->name('imagemasters.list');
 
-Route::resource('bankmasters', BankMasterController::class);
-Route::post('delete-bankmasters', [BankMasterController::class,'destroy']);
-Route::get('bankmasters-list', [BankMasterController::class,'getdata'])->name('bankmasters.list');
+// Route::resource('bankmasters', BankMasterController::class);
+// Route::post('delete-bankmasters', [BankMasterController::class,'destroy']);
+// Route::get('bankmasters-list', [BankMasterController::class,'getdata'])->name('bankmasters.list');
 
 Route::resource('regionmasters', RegionMasterController::class);
 Route::post('delete-regionmasters', [RegionMasterController::class,'destroy']);

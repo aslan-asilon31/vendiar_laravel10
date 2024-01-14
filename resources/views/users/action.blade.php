@@ -1,8 +1,8 @@
-<a href="{{ route('users.edit',$id) }}" data-toggle="tooltip" data-original-title="Edit" class="edit btn btn-sm btn-success edit">
-	<i class="mdi mdi-pen menu-icon"></i>
+<a href="{{ route('users.edit', ['user_id' => $user->user_id]) }}" data-toggle="tooltip" data-original-title="Edit" class="edit btn btn-sm btn-success">
+    <i class="mdi mdi-pen menu-icon"></i>
 </a>
 
-<a href="javascript:void(0)" data-id="{{ $id }}" data-toggle="tooltip" data-original-title="Delete" class="delete btn btn-sm btn-danger">
+<a href="javascript:void(0)" data-id="" data-toggle="tooltip" data-original-title="Delete" class="delete btn btn-sm btn-danger">
 	<i class="mdi mdi-delete menu-icon"></i>
 </a>
 

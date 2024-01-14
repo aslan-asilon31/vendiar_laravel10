@@ -126,7 +126,7 @@
 
             <div class="home__image">
                <div class="home__blob">
-                  <img src="{{asset('frontend/')}}img/home-lamp.png" alt="home image" class="home__img">
+                  <img src="{{asset('frontend/img/home-lamp.png')}}" alt="home image" class="home__img">
                   <h1 class="home__blob-title">
                      LIGHT
                   </h1>
@@ -159,7 +159,7 @@
                      <h3 class="popular__name">Modern Light</h3>
                      <span class="popular__subtitle">Hanging Light</span>
                      <h3 class="popular__price">
-                        <span>$</span>14
+                        <span>Rp </span>100.000
                      </h3>
 
                      <button class="popular__button">
@@ -175,7 +175,7 @@
                      <h3 class="popular__name">Industrial Light</h3>
                      <span class="popular__subtitle">Hanging Light</span>
                      <h3 class="popular__price">
-                        <span>$</span>20
+                        <span>Rp </span>100.000
                      </h3>
 
                      <button class="popular__button">
@@ -191,7 +191,7 @@
                      <h3 class="popular__name">Superbolw Light</h3>
                      <span class="popular__subtitle">Hanging Light</span>
                      <h3 class="popular__price">
-                        <span>$</span>18
+                        <span>Rp </span>100.000
                      </h3>
 
                      <button class="popular__button">
@@ -207,7 +207,7 @@
                      <h3 class="popular__name">Ultrawide Light</h3>
                      <span class="popular__subtitle">Hanging Light</span>
                      <h3 class="popular__price">
-                        <span>$</span>16
+                        <span>Rp </span>100.000
                      </h3>
 
                      <button class="popular__button">
@@ -223,7 +223,7 @@
                      <h3 class="popular__name">Roundness Light</h3>
                      <span class="popular__subtitle">Hanging Light</span>
                      <h3 class="popular__price">
-                        <span>$</span>17
+                        <span>Rp </span>100.000
                      </h3>
 
                      <button class="popular__button">
@@ -413,7 +413,7 @@
                   <h3 class="products__name">Modern Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>14
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">
@@ -429,7 +429,7 @@
                   <h3 class="products__name">Industrial Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>20
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">
@@ -445,7 +445,7 @@
                   <h3 class="products__name">Superbolw Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>18
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">
@@ -461,7 +461,7 @@
                   <h3 class="products__name">Ultrawide Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>16
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">
@@ -477,7 +477,7 @@
                   <h3 class="products__name">Roundness Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>17
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">
@@ -493,7 +493,7 @@
                   <h3 class="products__name">Stickness Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>28
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">
@@ -509,7 +509,7 @@
                   <h3 class="products__name">Superjet Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>15
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">
@@ -525,7 +525,7 @@
                   <h3 class="products__name">Nakedness Light</h3>
                   <span class="products__subtitle">Hanging Light</span>
                   <h3 class="products__price">
-                     <span>$</span>10
+                     <span>Rp </span>100.000
                   </h3>
 
                   <button class="products__button">

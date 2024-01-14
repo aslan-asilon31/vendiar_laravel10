@@ -21,14 +21,14 @@
         <a class="btn btn-primary" href="{{ route('users.index') }}" enctype="multipart/form-data"> Back</a>
     </div>
 
-  <form action="{{ route('users.update',$user->id) }}" method="POST" enctype="multipart/form-data">
+  <form action="{{ route('users.update',$user->user_id) }}" method="POST" enctype="multipart/form-data">
       @csrf
       @method('PUT')
  
        <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12">
               <div class="form-group">
-                  <strong>Company Name:</strong>
+                  <strong>User Name:</strong>
                   <input type="text" name="name" value="{{ $user->name }}" class="form-control" placeholder="Company name">
                   @error('name')
                    <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>

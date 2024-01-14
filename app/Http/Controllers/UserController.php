@@ -14,8 +14,8 @@ class UserController extends Controller
 {
     
     public function index(){
-
-        return view('users.index');
+        $users = User::all();
+        return view('users.index',compact('users'));
     }
 
     public function export()
@@ -33,7 +33,7 @@ class UserController extends Controller
 
         if(request()->ajax()) {
 
-            $query = "SELECT a.user_id as id,a.name,a.email,c.image as image,a.created_at, b.name as role 
+            $query = "SELECT a.user_id as user_id,a.name,a.email,c.image as image,a.created_at, b.name as role 
                         FROM users a
                         LEFT JOIN roles_masters b ON a.role = b.roles_id
                         LEFT JOIN image_masters c ON a.image = c.image_master_id
@@ -42,10 +42,13 @@ class UserController extends Controller
             $users = DB::connection('mysql')->select($query);
 
             return datatables()->of($users)
-            ->addColumn('action', 'users.action')
+            ->addColumn('action', function ($user) {
+                return view('users.action', ['user' => $user]);
+            })
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
+
         }
 
     }
@@ -53,11 +56,6 @@ class UserController extends Controller
     public function create()
     {
         return view('users.create');
-    }
-
-    public function action()
-    {
-        return view('users.action');
     }
 
 
@@ -115,19 +113,28 @@ class UserController extends Controller
     } 
 
 
-    public function edit(User $user)
+    public function edit(Request $request)
     {
+        $user = User::where('user_id', $request->user_id)->first();
+
+        // Check if the user exists
+        if (!$user) {
+            abort(404); // or handle the case when user is not found
+        }
+    
+        // Now you can work with the $user object
         return view('users.edit',compact('user'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,User $user)
     {
+        // dd($user);
         $request->validate([
             'name' => 'required',
             'email' => 'required'
         ]);
         
-        $user = User::find($id);
+        // $user = User::find($id);
 
         $user->name = $request->name;
         $user->email = $request->email;
