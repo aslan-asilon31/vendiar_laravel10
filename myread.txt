@@ -10,3 +10,5 @@ https://developers.facebook.com/apps/745515020213715/settings/basic/
 https://developer.twitter.com/en/portal/projects/1742378561628172288/
 
 https://github.com/settings/applications/
+
+localhost : 8585
