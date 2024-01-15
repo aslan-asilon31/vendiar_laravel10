@@ -18,7 +18,7 @@ AngularJS : https://github.com/aslan-asilon34/lumina_angularjs  <br>
 <ul>
     <li>
         <a href="#screenshoot">  Screenshoots</a>
-        <a href="#dashbaord">- Dashboard</a>
+        <a href="#dashboard">- Dashboard</a>
         <a href="#backend_user_list">- User List</a>
     </li>
     <li>
@@ -37,7 +37,7 @@ AngularJS : https://github.com/aslan-asilon34/lumina_angularjs  <br>
 
 ## Features
 - Add API Documentation using Swagger
-
+- Backup db PostgreSQL and MysQL
 
 </div>
 

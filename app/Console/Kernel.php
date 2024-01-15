@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('database:backup')->daily();
         $schedule->command('database:manual-backup')->everySecond();
+        $schedule->command('database:manual-backup-pgsql')->everySecond();
         
     }
 
