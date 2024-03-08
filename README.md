@@ -20,6 +20,7 @@
 
 <div class="" id="screenshoot">
 ##  Screnshoots (not all pages in the screenshot) <br>
+    
 ![1](https://github.com/aslan-asilon31/vendiar_laravel10/assets/116990574/83f9cce3-3183-4ac7-bd34-4b155d28bbbe)
 
 ![2](https://github.com/aslan-asilon31/vendiar_laravel10/assets/116990574/db2a4ba0-d6dd-4ef8-9bef-e188368babbc)
