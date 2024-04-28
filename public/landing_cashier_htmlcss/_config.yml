@@ -1,0 +1,57 @@
+title: MESIN KASIR
+description: mesin kasir, aplikasi kasir toko restoran, pembuatan website app.
+author: 
+  name: mesinkasir
+  email: hockeycorpmarketing@gmail.com
+  whatsapp: 62895339403223
+  phone: 62895339403223
+  address: Ruko Pasar Wisata Juanda Q.05-07
+  country: Sidoarjo - East Java - Indonesia
+  map: https://goo.gl/maps/EpcU3m3ryPMihifx7
+cover: /assets/img/APLIKASI MESIN KASIR ONLINE.png
+future: true
+url: https://mesinkasir.github.io
+baseurl: ''
+collections:
+  pages:
+    output: true
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "default"
+      permalink: /:year/:month/:title:output_ext
+#      permalink: /:title
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+
+paginate: 5
+paginate_path: "/blog/page:num/"
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-paginate
+  - jekyll-paginate-multiple
+
+markdown: kramdown
+highlighter: rouge
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    default_lang: html
+    css_class   : 'syntax'
+
+

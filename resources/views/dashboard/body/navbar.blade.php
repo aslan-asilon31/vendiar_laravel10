@@ -5,7 +5,7 @@
                 <i class="ri-menu-line wrapper-menu"></i>
                 <a href="{{ route('dashboard') }}" class="header-logo">
                     <img src="../assets/images/logo.png" class="img-fluid rounded-normal" alt="logo">
-                    <h5 class="logo-title ml-3">POSDash</h5>
+                    <h5 class="logo-title ml-3">Vendiar</h5>
                 </a>
             </div>
             <div class="iq-search-bar device-search">
